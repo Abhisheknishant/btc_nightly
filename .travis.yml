@@ -30,7 +30,6 @@ after_script:
 
 jobs:
  include:
- - os: osx
  - os: linux
    arch: arm64
    env: >-
@@ -39,32 +38,11 @@ jobs:
     TEST_RUNNER_EXTRA=""
    install:
     - sudo apt update && sudo apt install python3-zmq -y
-
-
- - os: windows
+ - os: linux
+   arch: amd64
    env: >-
     SHASUM=sha256sum
-    BIN=WIN
+    BIN=ARM64
+    TEST_RUNNER_EXTRA=""
    install:
-    - choco install python --version=3.7.5
-    - export PYTHON="C:\Python37\python"
-    - powershell "${PYTHON} --version"
-    - powershell 'C:\Python37\Scripts\pip install pyzmq'
-    - export PYTHONIOENCODING="UTF-8"
-    - export PYTHONUTF8=1
-   before_script:
-    - git clone https://github.com/bitcoin/bitcoin.git ./bitcoin-core-nightly
-    - cd bitcoin-core-nightly
-    - export SRCDIR=$(pwd)
-    - echo $SRCDIR
-    - powershell "${PYTHON} ../download_latest_nightly.py --bin=${BIN} --srcdir=${SRCDIR}"
-    - export VERSION=$(tail -1 ./version.txt)
-    - export BUILDDIR=$(tail -1 ./build_dir.txt)
-    - echo $VERSION
-    - echo $BUILDDIR
-   script:
-    - ${BUILDDIR}/src/test_bitcoin.exe
-    - cd ${SRCDIR}
-    - git checkout $VERSION
-    - powershell "${PYTHON} ./test/util/bitcoin-util-test.py -v"
-    - powershell "${PYTHON} ./test/functional/test_runner.py wallet_disable wallet_multiwallet"
+    - sudo apt update && sudo apt install python3-zmq -y
